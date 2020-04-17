@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<!--
+	Aerial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>哇哈哈小屋</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<div id="wrapper">
+			<div id="bg"></div>
+			<div id="overlay"></div>
+			<div id="main">
+
+				<!-- Header -->
+					<header id="header">
+						<h1>Mr wang</h1>
+						<p>Hello world &nbsp;&bull;&nbsp; Thank you for coming</p>
+						<nav>
+							<ul>
+								<!-- <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li> -->
+								<li><a href="javascript:opentest()" class="icon brands fa-angellist" title="My blog"><span class="label">My blog</span></a></li>
+								<li><a href="http://www.wangjd.xyz:8080/yj/login.jsp" class="fa fa-book" title="My note"><span class="label">Dribbble</span></a></li>
+								<li><a href="https://github.com/wjd123" class="icon brands fa-github" title="My GitHub"><span class="label">Github</span></a></li>
+								<li><a href="javascript:openemail()" class="icon solid fa-envelope" title="My email"><span class="label" >Email</span></a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<span class="copyright"><a href=""></a>.</span>
+					</footer>
+
+			</div>
+		</div>
+		<script>
+			window.onload = function() { document.body.classList.remove('is-preload'); }
+			window.ontouchmove = function() { return false; }
+			window.onorientationchange = function() { document.body.scrollTop = 0; }
+
+			function opentest(){
+				alert('暂未开发哦！');
+			}
+
+			function openemail(){
+				alert('wjd123mail@gmail.com');
+			}
+		</script>
+	</body>
+</html>
