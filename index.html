@@ -25,8 +25,8 @@
 						<nav>
 							<ul>
 								<!-- <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li> -->
-								<li><a href="javascript:opentest()" class="icon brands fa-angellist" title="My blog"><span class="label">My blog</span></a></li>
-								<li><a href="http://www.wangjd.xyz:8080/yj/login.jsp" class="fa fa-book" title="My note"><span class="label">Dribbble</span></a></li>
+								<li><a href="assets\wang\myresume.pdf" class="icon brands fa-angellist" title="My resume"><span class="label">My blog</span></a></li>
+								<li><a href="javascript:opentest()" class="fa fa-book" title="My note"><span class="label">Dribbble</span></a></li>
 								<li><a href="https://github.com/wjd123" class="icon brands fa-github" title="My GitHub"><span class="label">Github</span></a></li>
 								<li><a href="javascript:openemail()" class="icon solid fa-envelope" title="My email"><span class="label" >Email</span></a></li>
 							</ul>
@@ -41,12 +41,14 @@
 			</div>
 		</div>
 		<script>
+
 			window.onload = function() { document.body.classList.remove('is-preload'); }
 			window.ontouchmove = function() { return false; }
 			window.onorientationchange = function() { document.body.scrollTop = 0; }
 
 			function opentest(){
-				alert('暂未开发哦！');
+				alert('用户名:admin \r\n\r\n密   码:123456');
+				location.href="http://www.wangjd.xyz:8080/yj/login.jsp"; 
 			}
 
 			function openemail(){
