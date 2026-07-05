@@ -1,57 +1,487 @@
-<!-- <head>
-  <meta http-equiv="Refresh" content="0; URL=http://haloo.top" />
-</head> -->
-<!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>哇哈哈小屋</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<link rel="shortcut icon" href="assets\wang\head.jpg"/>
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课时费计算器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px 60px;
+  }
+  .container { max-width: 1100px; width: 100%; }
 
-				<!-- Header -->
-					<header id="header">
-						<h3>Mr wang</h3>
-						<hr width="80px"  style="height:2px;" color="#80c4f9"/>
-						<p></p>
-						<span style="font-size:10px;">比学会知识更重要的是学会爱与被爱</span>
-						<nav>
-							<ul>
-								<!-- <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li> -->
-								<li><a href="http://haloo.top" class="icon brands fa-angellist" title="My blog"><span class="label">My blog</span></a></li>
-								<!-- <li><a href="javascript:opentest()" class="fa fa-book" title="My note"><span class="label">Dribbble</span></a></li> -->
-								<li><a href="https://github.com/wjd123" class="icon brands fa-github" title="My GitHub"><span class="label">Github</span></a></li>
-								<li><a href="mailto:wjd123mail@gmail.com" class="icon solid fa-envelope" title="My email"><span class="label" >Email</span></a></li>
-							</ul>
-						</nav>
-					</header>
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #4a90d9, #e07b39);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    color: #888;
+    font-size: 15px;
+    margin-top: 4px;
+  }
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright"><a href=""></a>.</span>
-					</footer>
+  .calc-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 760px) {
+    .calc-row { flex-direction: column; }
+  }
 
-			</div>
-		</div>
-		<script>
+  .panel {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    transition: box-shadow 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .panel:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+  }
 
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .panel-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .panel h2 { font-size: 22px; font-weight: 700; }
+  .panel .subtitle {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 20px;
+    margin-left: 50px;
+  }
 
-		</script>
-	</body>
+  .panel.child { border-top: 4px solid #4a90d9; }
+  .panel.child .panel-icon { background: #e8f0fe; color: #4a90d9; }
+  .panel.child h2 { color: #4a90d9; }
+
+  .panel.adult { border-top: 4px solid #e07b39; }
+  .panel.adult .panel-icon { background: #fef3e9; color: #e07b39; }
+  .panel.adult h2 { color: #e07b39; }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .input-group label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+  }
+  .input-group .clear-btn {
+    font-size: 13px;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 2px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .input-group .clear-btn:hover {
+    color: #666;
+    background: #f0f0f0;
+  }
+  textarea {
+    width: 100%;
+    height: 140px;
+    border: 2px solid #e8ecf1;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 20px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    resize: vertical;
+    transition: all 0.25s;
+    background: #fafbfc;
+    line-height: 1.6;
+    color: #2c3e50;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: #4a90d9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(74,144,217,0.1);
+  }
+  .panel.adult textarea:focus {
+    border-color: #e07b39;
+    box-shadow: 0 0 0 3px rgba(224,123,57,0.1);
+  }
+
+  .quick-fill {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .quick-fill button {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 14px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quick-fill button:hover {
+    border-color: #bbb;
+    color: #444;
+    background: #f7f7f7;
+  }
+  .panel.child .quick-fill button:hover { border-color: #4a90d9; color: #4a90d9; background: #e8f0fe; }
+  .panel.adult .quick-fill button:hover { border-color: #e07b39; color: #e07b39; background: #fef3e9; }
+
+  .rules-box {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .panel.child .rules-box {
+    background: #f0f6ff;
+    color: #5a7db0;
+    border-left: 3px solid #4a90d9;
+  }
+  .panel.adult .rules-box {
+    background: #fef8f2;
+    color: #b07a50;
+    border-left: 3px solid #e07b39;
+  }
+  .rules-box .tag {
+    display: inline-block;
+    padding: 0px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 2px;
+  }
+  .panel.child .rules-box .tag { background: #4a90d9; color: #fff; }
+  .panel.adult .rules-box .tag { background: #e07b39; color: #fff; }
+
+  .result-box {
+    margin-top: 18px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .result-box .label { font-size: 14px; margin-bottom: 4px; }
+  .result-box .value {
+    font-size: 36px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .panel.child .result-box {
+    background: linear-gradient(135deg, #e8f0fe, #dbeafe);
+  }
+  .panel.child .result-box .label { color: #4a90d9; }
+  .panel.child .result-box .value { color: #2563eb; }
+  .panel.adult .result-box {
+    background: linear-gradient(135deg, #fef3e9, #fde8d5);
+  }
+  .panel.adult .result-box .label { color: #e07b39; }
+  .panel.adult .result-box .value { color: #c2410c; }
+
+  .detail-section {
+    margin-top: 16px;
+  }
+  .detail-section .detail-label {
+    font-size: 14px;
+    color: #999;
+    padding: 4px 0;
+    margin-bottom: 4px;
+  }
+
+  .detail {
+    font-size: 16px;
+    color: #555;
+    max-height: 400px;
+    overflow-y: auto;
+    line-height: 2.2;
+  }
+
+  .detail::-webkit-scrollbar { width: 4px; }
+  .detail::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+  .detail::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+  .detail .item {
+    display: flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 2px 0;
+  }
+  .detail .item.free {
+    color: #e07b39;
+    background: #fef8f2;
+  }
+  .detail .item.free .amount {
+    text-decoration: line-through;
+    margin-right: 6px;
+  }
+  .detail .item.paid { color: #2563eb; background: #f0f6ff; }
+  .detail .item .idx { font-weight: 600; min-width: 42px; }
+  .detail .item .note { font-size: 13px; color: #aaa; margin-left: auto; }
+
+  .total-panel {
+    background: #1a1a2e;
+    border-radius: 16px;
+    padding: 22px 32px;
+    box-shadow: 0 4px 24px rgba(26,26,46,0.2);
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .total-panel .total-left {
+    text-align: left;
+  }
+  .total-panel .total-left h2 {
+    font-size: 15px;
+    color: #a0aec0;
+    font-weight: 500;
+  }
+  .total-panel .total-left .total-amount {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .total-panel .total-right {
+    text-align: right;
+    font-size: 15px;
+    color: #a0aec0;
+    line-height: 1.9;
+  }
+  .total-panel .total-right span {
+    color: #ffd700;
+    font-weight: 600;
+  }
+  @media (max-width: 600px) {
+    .total-panel { flex-direction: column; text-align: center; }
+    .total-panel .total-left, .total-panel .total-right { text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>课时费计算器</h1>
+    <p>输入每节课人数，自动计算课时费</p>
+  </header>
+
+  <div class="calc-row">
+    <div class="panel child">
+      <div class="panel-header">
+        <div class="panel-icon">S</div>
+        <h2>少儿课程</h2>
+      </div>
+      <div class="subtitle">支持逗号、加号、空格分隔</div>
+
+      <div class="input-group">
+        <label>上课人数序列 <button class="clear-btn" onclick="clearInput('childInput')">清空</button></label>
+        <textarea id="childInput" placeholder="例如: 2,3,4,5,6,4,5"></textarea>
+      </div>
+      <div class="quick-fill">
+        <button onclick="fillInput('childInput','2,3,4,5,6,4,5')">示例数据</button>
+        <button onclick="fillInput('childInput','1,1,2,2,3,3,3,4,5,5,6,6,3,3,3,3,3,4,4,4,3,3,3,3,3,5')">含免费课节</button>
+      </div>
+
+      <div class="rules-box">
+        <span class="tag">3人以下</span> 每人 <b>30</b> 元 &nbsp;
+        <span class="tag">3人及以上</span> <b>150 + (人数-3) &times; 10</b> 元<br>
+        前 <b>20</b> 节 3 人及以上课程 <b>不计课时费</b>
+      </div>
+
+      <div class="result-box">
+        <div class="label">少儿课时费</div>
+        <div class="value" id="childResult">0</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">明细</div>
+        <div class="detail" id="childDetail"></div>
+      </div>
+    </div>
+
+    <div class="panel adult">
+      <div class="panel-header">
+        <div class="panel-icon">A</div>
+        <h2>成人课程</h2>
+      </div>
+      <div class="subtitle">支持逗号、加号、空格分隔</div>
+
+      <div class="input-group">
+        <label>上课人数序列 <button class="clear-btn" onclick="clearInput('adultInput')">清空</button></label>
+        <textarea id="adultInput" placeholder="例如: 2,3,4,5,6,4,5"></textarea>
+      </div>
+      <div class="quick-fill">
+        <button onclick="fillInput('adultInput','2,3,4,5,6,4,5')">示例数据</button>
+        <button onclick="fillInput('adultInput','1,1,2,2,5,8,10,3,4,6')">混合人数</button>
+      </div>
+
+      <div class="rules-box">
+        <span class="tag">3人以下</span> 每节课 <b>150</b> 元 &nbsp;
+        <span class="tag">3人及以上</span> <b>150 + (人数-2) &times; 10</b> 元
+      </div>
+
+      <div class="result-box">
+        <div class="label">成人课时费</div>
+        <div class="value" id="adultResult">0</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-label">明细</div>
+        <div class="detail" id="adultDetail"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-panel">
+    <div class="total-left">
+      <h2>总课时费</h2>
+      <div class="total-amount" id="totalAmount">4,500</div>
+    </div>
+    <div class="total-right">
+      底薪 <span>4,500</span><br>
+      少儿 <span id="childBreakdown">0</span> + 成人 <span id="adultBreakdown">0</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE_SALARY = 4500;
+const CHILD_FREE_LIMIT = 20;
+
+function parseInput(str) {
+  return str
+    .split(/[,，+\s]+/)
+    .filter(s => s.trim() !== '')
+    .map(s => parseInt(s, 10))
+    .filter(n => !isNaN(n) && n > 0);
+}
+
+function calcChild(nums) {
+  let total = 0;
+  let bigClassIndex = 0;
+  const details = [];
+  nums.forEach((n, i) => {
+    if (n < 3) {
+      const fee = n * 30;
+      total += fee;
+      details.push({ idx: i + 1, num: n, fee, free: false });
+    } else {
+      bigClassIndex++;
+      if (bigClassIndex <= CHILD_FREE_LIMIT) {
+        details.push({ idx: i + 1, num: n, fee: 0, free: true, freeSeq: bigClassIndex });
+      } else {
+        const fee = 150 + (n - 3) * 10;
+        total += fee;
+        details.push({ idx: i + 1, num: n, fee, free: false });
+      }
+    }
+  });
+  return { total, details };
+}
+
+function calcAdult(nums) {
+  let total = 0;
+  const details = [];
+  nums.forEach((n, i) => {
+    let fee = n < 3 ? 150 : 150 + (n - 2) * 10;
+    total += fee;
+    details.push({ idx: i + 1, num: n, fee });
+  });
+  return { total, details };
+}
+
+function formatMoney(n) {
+  return n.toLocaleString('zh-CN');
+}
+
+function renderDetail(details, type) {
+  if (details.length === 0) return '<div style="color:#bbb;text-align:center;padding:8px;">暂无数据</div>';
+  return details.map(d => {
+    if (d.free) {
+      return `<div class="item free"><span class="idx">#${d.idx}</span> ${d.num}人 <span class="amount">0元</span> <span class="note">前20节免费</span></div>`;
+    }
+    return `<div class="item paid"><span class="idx">#${d.idx}</span> ${d.num}人 <span>${formatMoney(d.fee)}元</span></div>`;
+  }).join('');
+}
+
+function clearInput(id) {
+  document.getElementById(id).value = '';
+  update();
+}
+
+function fillInput(id, value) {
+  document.getElementById(id).value = value;
+  update();
+}
+
+function update() {
+  const childNums = parseInput(document.getElementById('childInput').value);
+  const adultNums = parseInput(document.getElementById('adultInput').value);
+  const child = calcChild(childNums);
+  const adult = calcAdult(adultNums);
+
+  document.getElementById('childResult').textContent = formatMoney(child.total);
+  document.getElementById('adultResult').textContent = formatMoney(adult.total);
+  document.getElementById('childDetail').innerHTML = renderDetail(child.details);
+  document.getElementById('adultDetail').innerHTML = renderDetail(adult.details);
+
+  const grandTotal = BASE_SALARY + child.total + adult.total;
+  document.getElementById('totalAmount').textContent = formatMoney(grandTotal);
+  document.getElementById('childBreakdown').textContent = formatMoney(child.total);
+  document.getElementById('adultBreakdown').textContent = formatMoney(adult.total);
+}
+
+document.getElementById('childInput').addEventListener('input', update);
+document.getElementById('adultInput').addEventListener('input', update);
+update();
+</script>
+</body>
 </html>
